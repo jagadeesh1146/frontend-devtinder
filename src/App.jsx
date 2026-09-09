@@ -1,11 +1,18 @@
 import React from "react";
-import Header from "./components/Header";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Body from "./Body";
+import Login from "./auth/Login";
 
 const App = () => {
   return (
-    <Header/>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Body />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;
