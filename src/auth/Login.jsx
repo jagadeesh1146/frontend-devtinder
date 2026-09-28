@@ -1,5 +1,4 @@
-import React from "react";
-import {useState} from 'react';
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
@@ -7,27 +6,58 @@ import { useNavigate } from "react-router-dom";
 import { BASEURL } from "../utils/constants";
 
 const Login = () => {
-    const [emailId , setEmailId]=useState("")
-    const [password , setPassword] = useState("")
-const dispatch = useDispatch()
-const navigate = useNavigate()
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-   const handleLogin = async () => {
+  const handleLogin = async () => {
+    // Clear previous error
+    setError("");
 
-  try {
-    const res = await axios.post(BASEURL + "/login", {
-      email:emailId,
-      password:password,
-    },{withCredentials : true});
+    // Basic validation
+    if (!emailId || !password) {
+      setError("Please enter email and password");
+      return;
+    }
 
-    dispatch(addUser(res.data))
-    navigate("/feed")
-    
-  } catch (err) {
-    console.error(err);
-  }
-};
+    try {
+      const res = await axios.post(
+        BASEURL + "/login",
+        {
+          email: emailId,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("Login successful:", res.data);
+
+      dispatch(addUser(res.data));
+
+      navigate("/feed");
+    } catch (err) {
+      console.log( err.response);
+
+      if (err.response) {
+        // Backend sent a response
+        setError(
+          err.response.data?.message ||
+          "Invalid email or password"
+        );
+      } else if (err.request) {
+        // Request was sent but no response received
+        setError("Unable to connect to server");
+      } else {
+        // Something went wrong while creating request
+        setError("Something went wrong. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="flex justify-center mt-10">
@@ -37,6 +67,7 @@ const navigate = useNavigate()
           Login
         </h2>
 
+        {/* Email */}
         <div className="mb-5">
           <label className="block text-gray-300 mb-2">
             Email
@@ -46,12 +77,13 @@ const navigate = useNavigate()
             type="email"
             placeholder="Enter your email"
             value={emailId}
-            onChange={(e)=>setEmailId(e.target.value)}
+            onChange={(e) => setEmailId(e.target.value)}
             className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="mb-6">
+        {/* Password */}
+        <div className="mb-1">
           <label className="block text-gray-300 mb-2">
             Password
           </label>
@@ -60,13 +92,25 @@ const navigate = useNavigate()
             type="password"
             placeholder="Enter your password"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <button className="w-full bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
-          onClick={handleLogin}>
+        {/* Error */}
+        <div className="min-h-10 mt-3 mb-3">
+          {error && (
+            <p className="text-red-400 text-sm">
+              {error}
+            </p>
+          )}
+        </div>
+
+        {/* Login button */}
+        <button
+          className="w-full bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+          onClick={handleLogin}
+        >
           Login
         </button>
 
