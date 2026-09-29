@@ -72,6 +72,14 @@ const Header = () => {
               >
               connections
               </Link>
+               <Link
+              to="/requests"
+              onClick = {()=>setShowMenu(false)}
+               className="block px-4 py-3 hover:bg-gray-300"
+
+              >
+              requests
+              </Link>
 
               {/* Logout */}
               <button

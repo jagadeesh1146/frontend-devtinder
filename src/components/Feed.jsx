@@ -31,7 +31,12 @@ const Feed = () => {
     if (feed.length === 0) {
       getFeed();
     }
-  }, [feed]);
+  }, []);
+
+ // if(feed.length === 0) return <h3>no users found!!!</h3>
+  if (feed.length === 0) {
+    return <h2 className="text-2xl text-gray-600">No feed available</h2>;
+  }
 
   return (
     <div>

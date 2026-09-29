@@ -1,6 +1,32 @@
 import React from "react";
+import { BASEURL } from "../utils/constants";
+import axios from "axios";
+import { removeUserFromFeed } from "../store/feedSlice";
+import { useDispatch } from "react-redux";
 
 const FeedCard = ({ user }) => {
+
+  const dispatch = useDispatch()
+
+
+
+  const handleSendRequest=async(status , userId)=>{
+    try{
+      const res = await axios.post(BASEURL + "/request/send/" + status +"/" + userId ,{},{withCredentials : true})
+      console.log(res)
+      dispatch(removeUserFromFeed(userId))
+
+
+    }catch(err){
+      console.log(err)
+      console.log(err.response?.data);
+    }
+
+  }
+
+  
+
+
   return (
     <div className="flex justify-center py-8">
       <div className="w-96 overflow-hidden rounded-2xl bg-white shadow-xl">
@@ -47,11 +73,13 @@ const FeedCard = ({ user }) => {
 
           {/* Buttons */}
           <div className="mt-6 flex justify-center gap-4">
-            <button className="rounded-lg border border-red-500 px-5 py-2 font-semibold text-red-500 hover:bg-red-50">
+            <button className="rounded-lg border border-red-500 px-5 py-2 font-semibold text-red-500 hover:bg-red-50"
+            onClick={()=>handleSendRequest("ignored",user._id)}>
               Ignore
             </button>
 
-            <button className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700">
+            <button className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700"
+            onClick={()=>handleSendRequest("interested",user._id)}>
               Interested
             </button>
           </div>

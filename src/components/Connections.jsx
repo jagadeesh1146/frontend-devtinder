@@ -16,10 +16,13 @@ const Connections = () => {
             );
 
             console.log(res.data.data);
-            setConnections(res.data.data);
+            setConnections(res.data.data );
 
         } catch (err) {
             console.log("ERROR:", err);
+            console.log("FULL RESPONSE:", res);
+           console.log("RESPONSE DATA:", res.data);
+            console.log("CONNECTION DATA:", res.data?.data);
         }
     };
 
@@ -27,7 +30,7 @@ const Connections = () => {
         getConnections();
     }, []);
 
-    if(connections.length === 0) return <h1>no connections found</h1>
+    //if(connections.length === 0) return <h1>no connections found</h1>
 
     return (
         <div className="min-h-screen bg-base-200 py-10">

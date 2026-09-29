@@ -8,6 +8,7 @@ import Feed from "./components/Feed";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import Connections from "./components/Connections";
+import Requests from "./components/Requests";
 const App = () => {
   return (
     <Provider store={store}>
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/profile" element={<Profile/>}/>
           <Route path = "/settings" element={<Settings/>}/>
           <Route path ="/connections" element={<Connections/>}/>
+          <Route path="/requests" element={<Requests/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
